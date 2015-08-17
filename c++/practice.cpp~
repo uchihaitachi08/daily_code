@@ -1,0 +1,17 @@
+#include<iostream>
+#include<cmath>
+using namespace std;
+struct node{
+	int data;
+	struct node* next;
+};
+int main(){
+	struct node* head = new struct node;
+	struct node* second = new struct node;	
+	head->data = 2;
+	head->next = second;
+	
+	second->data = 3;
+	second->next = NULL;	
+	return 0;
+}

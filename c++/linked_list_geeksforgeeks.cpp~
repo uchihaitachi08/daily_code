@@ -1,0 +1,272 @@
+//linked list from geeksforgeeks
+#include<iostream>
+using namespace std;
+struct node{
+	int data;
+	struct node* next;
+};
+//function for adding the pointer in front
+void push(struct node** head_ref, int data){
+	struct node* new_node = new struct node;
+	new_node->data = data; //there is no need of making a different case for empty list case
+	new_node->next = (*head_ref);
+	(*head_ref) = new_node;
+	return;
+}
+//function for adding the pointer at the end
+void append(struct node** head_ref, int data){
+	struct node* new_node = new struct node;
+	new_node->data = data;
+	new_node->next = NULL;
+	struct node* temp = *head_ref;
+	if (*head_ref == NULL)
+    {
+       *head_ref = new_node;
+	return;
+       }
+	while(temp->next != NULL){
+		temp = temp->next;
+	}
+	temp->next = new_node;
+	return;
+}
+//function to print the linked list
+void printlist(struct node* head){
+	struct node* temp = head;
+	while(head != NULL){
+		cout<<head->data<<endl;
+		head = head->next;
+}
+	cout<<"==============================="<<endl;
+	return;
+}
+//function add a node after nth node
+void insert(struct node** head_ref, int num, int data){
+	struct node* new_node = new struct node;
+	new_node->data = data;
+	struct node* temp = *head_ref;
+	for(int i=1;i<num;i++){
+		temp = temp->next;
+	}
+	new_node->next = temp->next;
+	temp->next = new_node;
+	return;
+}
+//function to delete nth node
+void delete_nth_node(struct node** head_ref,int num){
+	struct node* temp = *head_ref;
+	struct node* prev;
+	//embed a code to say if the linked list length doesnot contain that number of node
+	while(num>1){
+		prev = temp;
+		temp = temp->next;
+		num--;
+}
+	prev->next = temp->next;
+	delete(temp);
+	return;
+}
+//function to delete given integer from linked list
+void delete_num(struct node** head_ref, int num){
+	struct node* temp = *head_ref;
+	struct node* prev;
+	
+	if(temp->data == num){
+		*head_ref = temp->next;
+		delete(temp);
+		return;
+}
+	while(temp!= NULL && temp->data != num){
+		prev = temp;
+		temp = temp->next;
+}
+	if(temp == NULL){
+		cout<<"linked list doesn't contain the number"<<endl;
+}
+	prev->next = temp->next;
+	delete(temp);
+	return;
+}
+//recursive function to get the length of the linked list
+int getnode(struct node* head){
+	if(head == NULL)
+		return 0;
+	else
+		return 1+getnode(head->next);
+}
+//iterative function to get the length of the linked list 
+int getcount(struct node* head){
+	struct node* temp = head;
+	int count = 0;
+	while(temp != NULL){
+		count++;
+		temp = temp->next;
+}
+	return count;
+}
+//recursive function to search an element in linked list with return type boolean
+bool search_element(struct node* head, int key){
+	if(head == NULL)
+		return false;
+	if(head->data == key)
+		return true;
+	
+	return search_element(head->next,key);
+	
+}
+//iterative function to search an element in a linked list
+bool search_element_iter(struct node* head, int key){
+	while(head != NULL){
+	if(head->data == key)
+		return true;
+	head = head->next;
+}
+	return false;
+}
+//recursive function to get the nth node of the linked list
+int get_nth_node_rec(struct node* head, int num){
+	if(num==1)
+		return head->data;
+		num--;
+		return get_nth_node_rec(head->next,num);
+}
+//iterative function to get the nth node from linked list geeks for geeks
+int get_nth_node_iter(struct node* head, int num){
+	while(num != 1){
+		head= head->next;
+		num--;
+}
+	return head->data;
+}
+
+//printing the middle element of the linked list geeks for geeks
+//make two temp nodes and move the first one twice as first as the second one
+int get_middle_node(struct node* head){
+	struct node* temp = head;
+	while(head !=NULL){
+		head = head->next;
+		if(head != NULL){
+			head = head->next;
+			temp = temp->next;
+}
+}
+	return temp->data;
+}
+//if we are provided a pointer to the next node in a linked list and asked to delete it then the funtion is
+// make a temp node, copy the data from the node where the pointer is pointing and delete the node
+//this function does not work when the last node is to be deleted
+void delete_given_pointer_node(struct node* ptr){
+	struct node* temp = ptr->next;//this is very very important because the ptr wil save the data of the next node in temp
+	ptr->data = temp->data;
+	ptr->next = temp->next;
+	delete(temp);
+	
+}
+//function to return the nth pointer from the end
+//funda: take two pointer(ref and main), move the reference till nth node from head,then move reference and main till ref reaches null
+int nth_node_from_end(struct node* head,int num){
+	struct node* ref = head;
+	struct node* main_p = head;
+	while(num != 1){
+		ref = ref->next;
+		if(ref == NULL)
+			cout<<"the number of node you provided is greater than the length of the linked list"<<endl;// to check, error
+		num--;
+}
+	while(ref != NULL){
+		ref = ref->next;
+		if(ref == NULL)
+			break;
+		main_p = main_p->next;
+}
+	return main_p->data;
+}
+//recursive function to print the nth node from the end of the linked list geeks for geeks
+//funda: go to the end of the linked list and while returning increment if it's equal to n print the data
+void printnthfromlast(struct node* head, int n){
+	static int i = 0;
+	if(head == NULL)
+		return;
+	printnthfromlast(head->next,n);
+	if(++i == n)
+		cout<<head->data<<endl;
+}
+//function to delete the linked list
+void delete_linked_list(struct node** head_ref){
+	struct node* temp = *head_ref;
+	while(*head_ref != NULL){
+		temp = *head_ref;
+		*head_ref = (*head_ref)->next;
+		delete(temp);
+}
+}
+// function to print linked list in recursive function
+void printlist_recursive(struct node** head_ptr){
+	cout<<(*head_ptr)->data<<endl;
+	if((*head_ptr)->next == NULL)
+		return;
+	else
+		return printlist_recursive(&((*head_ptr)->next));
+}
+//recursive function to write linked list
+void delete_linked_list_recur(struct node** head_ref){
+	if(*head_ref == NULL)
+		return;
+	struct node* temp = *head_ref;
+	delete_linked_list_recur(&((*head_ref)->next));
+	delete(temp);
+	(*head_ref) = NULL;	
+}
+void deletelist(struct node *n){
+	if(n->next!=NULL){
+		deletelist(n->next);
+}
+	cout<<"Node to be deleted: "<<n->data<<endl;
+	delete(n);
+}
+//function that counts number of times a number appeared in linked list
+int count_rep_node(struct node* head, int num){
+	int count = 0;
+	while(head){
+		if(num == head->data)
+			count++;
+	head = head->next;
+}
+	return count;
+}
+//recursive function to count the number of times a node appeared in linked list
+int count_rep_node_recur(struct node* head, int num){
+	if(head == NULL)
+		return 0;
+	if(head->data == num) 
+		return 1+count_rep_node_recur(head->next, num);
+	else
+		return count_rep_node_recur(head->next, num);
+	
+}
+int main(){
+	struct node* head = NULL;
+	push(&head,9);
+	append(&head,47);
+	append(&head,3);
+	push(&head,10);
+	push(&head,3);
+	//printlist(head);
+	insert(&head,3,56);
+	//printlist_recursive(&head);
+	//printlist(head);
+	//cout<<getcount(head)<<endl;
+	//cout<<search_element_iter(head,10)<<endl;
+	//cout<<get_nth_node_iter(head,3)<<endl;
+	//cout<<get_middle_node(head)<<endl;
+	//cout<<"============!==================="<<endl;
+	//cout<<nth_node_from_end(head,5)<<endl;
+	//printnthfromlast(head,3);
+	cout<<count_rep_node_recur(head,3)<<endl;
+	cout<<count_rep_node(head,3)<<endl;
+	//delete_linked_list(&head);
+	//delete_linked_list_recur(&head);
+	//deletelist(head);
+	//printlist(head);
+	return 0;
+}
