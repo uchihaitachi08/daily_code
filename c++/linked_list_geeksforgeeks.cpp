@@ -33,7 +33,7 @@ void append(struct node** head_ref,int data){
 }
 //function to print the linked list
 void printlist(struct node* head){
-	struct node* temp = head;
+	//struct node* temp = head;
 	while(head != NULL){
 		cout<<head->data<<"\t";
 		head = head->next;
@@ -359,8 +359,8 @@ void insert_node_sorted_ll(struct node**head_ref,int data){
 	struct node* temp = *head_ref;
 	new_node->data = data;
 	if((*head_ref) == NULL || (*head_ref)->data >= data){
-		(*head_ref) = new_node;
 		new_node->next = temp;
+		(*head_ref) = new_node;
 		return;
 	}
 	while((*head_ref)->next->data < data || (*head_ref)->next == NULL){
@@ -372,11 +372,12 @@ void insert_node_sorted_ll(struct node**head_ref,int data){
 	return;
 }
 //recursive function to insert a node to a sorted linked list
-void insert_node_sorted_recur(struct node** head_ref,int data){
+void insert_node_sorted_recur(struct node** head_ref,int num){
 	struct node* new_node = new struct node;
-	new_node->data = data;
-	if((*head_ref)->data >= data || (*head_ref) == NULL){
+	new_node->data = num;
+	if((*head_ref) == NULL || (*head_ref)->data >= num ){
 		new_node->next = (*head_ref);
+		
 		(*head_ref) = new_node;
 		return;
 	}
@@ -385,7 +386,7 @@ void insert_node_sorted_recur(struct node** head_ref,int data){
 		(*head_ref)->next = new_node;
 		return;
 	}
-	return insert_node_sorted_recur(&((*head_ref)->next),data);
+	return insert_node_sorted_recur(&((*head_ref)->next),num);
 }
 //if two linked list are intersected then:
 //1) Get count of the nodes in first list, let count be c1.
@@ -582,19 +583,151 @@ bool identical(struct node *a,struct node *b)
 {
 	return ((a==NULL && b==NULL)||((a->data==b->data)&&identical(a->next,b->next)));
 }
+
+//recursive function to merge two sorted linked list 
+struct node* merge_sorted_lists(struct node* head1, struct node* head2){
+	if(!head1)
+		return head2;
+	else if(!head2)
+		return head1;
+	struct node* temp = new struct node;
+
+	if(head1->data <= head2 ->data){
+		
+		temp->data = head1->data;
+		temp->next = merge_sorted_lists(head1->next, head2);
+	}
+	else {
+		temp->data = head2->data;
+		temp->next = merge_sorted_lists(head1, head2->next);
+	}
+	return temp;
+}
+struct node* SortedMerge(struct node* a, struct node* b) 
+{
+  struct node* result = NULL;
+ 
+  /* Base cases */
+  if (a == NULL) 
+     return(b);
+  else if (b==NULL) 
+     return(a);
+ 
+  /* Pick either a or b, and recur */
+  if (a->data <= b->data) 
+  {
+     result = a;
+     result->next = SortedMerge(a->next, b);
+  }
+  else
+  {
+     result = b;
+     result->next = SortedMerge(a, b->next);
+  }
+  return(result);
+}
+
+//elegant inplace algorithm for merging two linked lists 
+//inplace means no extra place is required
+struct node* sortedmerge(struct node *head1, struct node *head2)
+{
+	struct node *head,*tail;
+	if(head1->data > head2->data)
+	{
+		head=head2;
+		tail=head;
+		head2=head2->next;
+	}
+	else
+	{
+		head=head1;
+		tail=head;
+		head1=head1->next;
+	}
+	while(head1!=NULL && head2!=NULL)
+	{
+		if(head1->data<head2->data)
+		{
+			tail->next=head1;
+			head1=head1->next;
+			tail=tail->next;
+		}
+		else
+		{
+			tail->next=head2;
+			head2=head2->next;
+			tail=tail->next;
+		}
+	}
+	while(head1!=NULL)
+	{
+		tail->next=head1;
+		head1=head1->next;
+		tail=tail->next;
+	}
+	while(head2!=NULL)
+	{
+		tail->next=head2;
+		head2=head2->next;
+		tail=tail->next;
+	}
+	return head;
+}
+
+struct node* split_mid(struct node* head){
+	struct node* fast = head->next;
+	struct node* slow = head;
+	while(fast != NULL && fast->next != NULL){
+		fast = fast->next->next;
+		slow = slow->next;
+	}
+	fast = slow->next;
+	slow->next = NULL;
+	return fast;
+}
+
+//merge sort for llinked list 
+void merge_sort(struct node** head_ref){
+	if((*head_ref)->next == NULL)
+		return;
+	struct node* result = NULL;
+	result = split_mid(*head_ref);
+	merge_sort(head_ref);
+	merge_sort(&result);
+	*head_ref = sortedmerge(*head_ref,result);
+	return;
+}
+
+//function for insertion sort for a single linked list 
+void insertion_sort(struct node** head_ref){
+	struct node* new_node = NULL;
+	while((*head_ref) != NULL){
+		insert_node_sorted_recur(&new_node,(*head_ref)->data);
+		(*head_ref) = (*head_ref)->next;
+	}
+	(*head_ref) = new_node;
+}
+
 int main(){
 	struct node* head = NULL;
 	struct node* head1 = NULL;
 	struct node* result  = NULL;
 
-	push(&head,1);
-	push(&head,2);
-	push(&head,3);
+	append(&head,10);
+	append(&head,87);
+	append(&head,18);
+	append(&head,9);
+	append(&head,56);
+	append(&head,47);
+	append(&head,13);
+	append(&head,107);
+	
+	
 
-	push(&head1,1);
-	push(&head1,2);
-	push(&head1,3);
+	printlist(head);
 
-	cout<<identical(head,head1)<<endl;
+	insertion_sort(&head);
+
+	printlist(head);
 	return 0;
 }
