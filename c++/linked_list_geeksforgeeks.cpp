@@ -708,6 +708,85 @@ void insertion_sort(struct node** head_ref){
 	(*head_ref) = new_node;
 }
 
+//function to reverse the linked list by a group of sizes 
+struct node* reverse_by_groups(struct node* head,int k){
+	struct node* current = head;
+	struct node* prev = NULL;
+	struct node* next = NULL;
+	int count = 0;
+
+	while(current != NULL && count < k){
+		next = current->next;
+		current->next = prev;
+		prev = current;
+		current = next;
+		count++;
+	}
+
+	if(next != NULL){
+		head->next = reverse_by_groups(next,k);
+	}
+	return prev;
+}
+
+//to delete nodes which have higher value on the right
+//funda: reverse the list, take a max value, if next_node < max delete next_node, else next_node->data = max;
+void delete_node_with_greate_right_value_util(struct node** head_ref){
+	struct node* temp = *head_ref;
+	int max = (*head_ref)->data;
+	struct node* delete_node;
+	while(*head_ref != NULL && (*head_ref)->next != NULL){
+		if((*head_ref)->next->data < max){
+			delete_node = (*head_ref)->next;
+			(*head_ref)->next  = (*head_ref)->next->next;
+			delete(delete_node);
+		}
+		else{
+			
+			(*head_ref) = (*head_ref)->next;
+			max = (*head_ref)->data;
+		}
+	}
+	(*head_ref) = temp;
+}
+
+void delete_node_with_greate_right_value(struct node** head_ref){
+	reverse_linked_list(head_ref);
+
+	delete_node_with_greate_right_value_util(head_ref);
+
+	reverse_linked_list(head_ref);
+
+}
+//iterative function to rotate a linked list using an after num counterclockwise
+void rotate_linked_list(struct node** head_ref,int k){
+	struct node* temp = (*head_ref);
+	struct node* head = (*head_ref);
+	while(temp->next != NULL){
+		k--;
+		temp = temp->next;
+		if(k==1)
+			head = temp;
+	}
+	temp->next = (*head_ref);
+	(*head_ref) = head->next;
+	head->next = NULL;
+}
+
+
+//function to segregate a linked list 
+// there are two funda:
+//1. go the end of the linked list and while traversing again throw the odd nodes to the end of the linked list
+//2. make two linked list of odd and even and then join them, the catch 
+//method 1
+void segregate_linked_list(struct node** head_ref){
+	struct node* temp = *head_ref;
+	while(temp->next != NULL)
+		temp = temp->next;
+	temp->next = (*head_ref);
+	(*head_ref) = (*head_ref)->next;
+	temp->next->next = NULl;
+}
 int main(){
 	struct node* head = NULL;
 	struct node* head1 = NULL;
@@ -718,15 +797,13 @@ int main(){
 	append(&head,18);
 	append(&head,9);
 	append(&head,56);
-	append(&head,47);
+	append(&head,56);
 	append(&head,13);
 	append(&head,107);
-	
-	
 
 	printlist(head);
 
-	insertion_sort(&head);
+	segregate_linked_list(&head);
 
 	printlist(head);
 	return 0;
