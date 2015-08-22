@@ -1,34 +1,17 @@
-#include <iostream>
-#include <algorithm>
+#include<iostream>
+#include<algorithm>
 #include<vector>
 using namespace std;
 int main(){
-	int n,count = 0,t;
-	float d1,d2;
-	cin>>t;
-	int *result = new int[t];
-	for(int k=0;k<t;k++){
-		cin>>n;
-		int **a = new int*[n];
-		for(int i=0;i<n;i++){
-			a[i] = new int[2];
-		}
-		for(int i=0;i<n;i++){
-			cin>>a[i][0]>>a[i][1];
-		}
-		for(int i=0;i<=n-2;i++){
-			for(int j=(i+1);j<n;j++){
-				d1 = a[i][0]-a[j][0];
-				d2 = a[i][1]-a[j][1];
-				if((d1/d2) < 0)
-					count++;
-			}
-		}
-		result[k] = count;
-		count = 0;
-	}
-	for(int i=0;i<t;i++){
-		cout<<result[i]<<endl;
+	vector<int>math;
+	vector<int>::iterator  iter_jj;
+	math.push_back(10);
+	math.push_back(30);
+	math.push_back(20);
+	math.push_back(9);
+	math.pop_back();
+	for(iter_jj = math.begin();iter_jj != math.end();iter_jj++){
+		cout<<*iter_jj<<endl;
 	}
 	return 0;
 }

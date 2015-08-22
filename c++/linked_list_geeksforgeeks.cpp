@@ -774,19 +774,137 @@ void rotate_linked_list(struct node** head_ref,int k){
 }
 
 
+void append_node(struct node** head_ref, struct node* head){
+	struct node* temp = *head_ref;
+	while(temp->next != NULL){
+		temp = temp->next;
+	}
+	temp->next = head;
+	head->next = NULL;
+}
+
 //function to segregate a linked list 
 // there are two funda:
 //1. go the end of the linked list and while traversing again throw the odd nodes to the end of the linked list
 //2. make two linked list of odd and even and then join them, the catch 
 //method 1
 void segregate_linked_list(struct node** head_ref){
-	struct node* temp = *head_ref;
-	while(temp->next != NULL)
-		temp = temp->next;
-	temp->next = (*head_ref);
-	(*head_ref) = (*head_ref)->next;
-	temp->next->next = NULl;
+	struct node* head1 = NULL;
+	struct node* curr = *head_ref;
+	struct node* prev;
+	struct node* temp;
+	while(curr != NULL){
+		if(curr->data % 2 == 0){
+			prev = curr;
+			curr = curr->next;
+			
+		}
+		else{
+			prev->next = curr->next;
+			if(head1 == NULL){
+				head1 = curr;
+				head1->next = NULL;
+				temp = head1->next;
+			}
+			else{
+				append_node(&head1,curr);
+			}
+			curr = prev->next;
+		}
+	}
+	prev->next = head1;
 }
+//elegant funda 
+//maintain two pointer for evena dn odd and traverse from the head_ref 
+// then point head1 to add numbers and point odd to head2 then join both
+
+void segregate_linked_list_another_method(struct node** head_ref){
+	struct node** head1 = head_ref;
+	struct node** head2 = head_ref;
+	struct node* head11 = *head1;
+	while(*head_ref != NULL){
+		if((*head_ref)->data%2 == 0){
+			*head1 = *head_ref;
+			*head1 = (*head1)->next;
+		}
+		else{
+			*head2 = *head_ref;
+			*head2 = (*head2)->next;
+		}
+		*head_ref = (*head_ref)->next;
+	}
+	(*head2)->next = NULL;
+	(*head1)->next = (*head2);
+	*head_ref = head11;
+}
+
+void swap_nodes(struct node** head_ref){
+	struct node** head1;
+	struct node** head2;
+	*head1 = (*head_ref)->next;
+	*head2 = (*head_ref);
+	(*head1)->next = *head2;
+	(*head2)->next = NULL;
+	*head_ref = *head1; 
+}
+
+//function to detect and delete loop from linked list
+//funda: via floyd's cycle algorithm go any of the nodes in the loop, calculate the length of the loop. 
+//now from that point and head start pointers where they will meet that will the starting poiint. just delete the previous node
+
+void detect_delete_loop(struct node* head){
+	struct node* fast = head->next;
+	struct node* slow = head;
+	struct node* prev;
+	while(fast != slow){
+		fast = fast->next->next;
+		slow = slow->next;
+	}
+	int count =1;
+	fast = fast->next;
+	while(fast != slow){
+		count++;
+		fast = fast->next;
+	}
+	fast = head;
+	slow = head;
+	while(count){
+		prev = fast;
+		fast = fast->next;
+		count--;
+	}
+	while(fast != slow){
+		prev = fast;
+		fast = fast->next;
+		slow = slow->next;
+	}
+
+	prev->next = NULL;
+}
+
+//fucntion: this is by far the mest method for the linked list removal
+//elegant code
+
+void removeLoop(struct node *head){
+	struct node *slow=head,*fast=head,*prev;
+	while(fast && fast->next){
+		fast=fast->next->next;
+		slow=slow->next;
+		if(slow==fast)
+			break;
+	}
+	if(slow!=fast){
+		cout<<"No loop detected"<<endl;
+		return;
+	}
+	while(head!=slow){
+		prev=slow;
+		slow=slow->next;
+		head=head->next;
+	}
+	prev->next=NULL;
+}
+
 int main(){
 	struct node* head = NULL;
 	struct node* head1 = NULL;
@@ -801,10 +919,13 @@ int main(){
 	append(&head,13);
 	append(&head,107);
 
+	head->next->next->next->next->next->next->next->next = head->next->next;
+
+	removeLoop(head);
+
 	printlist(head);
 
-	segregate_linked_list(&head);
 
-	printlist(head);
+
 	return 0;
 }
