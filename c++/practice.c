@@ -1,12 +1,12 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-int main(int argc, char const *argv[])
-{
-	int n;
-	scanf("%d",&n);
-	char *c = (char *)malloc(sizeof(char)*n);
-	scanf("%s",c);
-	printf("%s\n", c);
+int main(int argc, char const *argv[]){
+
+	char c = 's';
+	printf("%p\n",(void*)&c);
+	char *str = &c;
+	int i;
+	printf("%s\n",str);
 	return 0;
 }
