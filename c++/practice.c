@@ -3,10 +3,12 @@
 
 int main(int argc, char const *argv[]){
 
-	char c = 's';
-	printf("%p\n",(void*)&c);
-	char *str = &c;
-	int i;
-	printf("%s\n",str);
+	int i=123;
+	float x = 12.0,y = -3.3;
+	printf(":%6d %7.0f %10.1e:\n\n",i,x,y );
+	printf(":%-6d %-7.0f %-10.1e:\n\n",i,x,y );
+	printf(":%+6d %+7.0f %+10.1e:\n\n",i,x,y );
+	printf(":%-+6d %-+7.0f %-+10.1e:\n\n",i,x,y );
+
 	return 0;
 }

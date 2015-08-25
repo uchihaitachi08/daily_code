@@ -33,14 +33,14 @@ void push(struct Stack* stack,int data){
 int pop(struct Stack* stack){
 	if(isempty(stack)){
 		cout<<"sorry the stack is empty"<<endl;
-		return;
+		return  0;
 	}
 	return stack->arr[stack->top--];
 }
-void peek(struct Stack* stack){
+int peek(struct Stack* stack){
 	if(isempty(stack)){
 		cout<<"sorry the stack is empty"<<endl;
-		return;
+		return 0;
 	}
 	return stack->arr[stack->top];
 }
@@ -49,7 +49,19 @@ int main(){
 
 	push(stack, 10);
 
-	push(stack, 10);
-	push(stack, 10);
+	push(stack, 20);
+	push(stack, 30);
+	push(stack, 30);
+	push(stack, 30);
+	push(stack, 30);
+	pop(stack);
+	push(stack, 30);
+	pop(stack);
+	pop(stack);
+	pop(stack);
+	pop(stack);
+	pop(stack);
+	pop(stack);
+
 	return 0;
 }
