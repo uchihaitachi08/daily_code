@@ -1,20 +1,45 @@
 #include<iostream>
-#include<cstring>
+#include<string>
 using namespace std;
 int main(){
-	int t,*c,count = -1,result;
+	int n,count = 0,*c,result = 0;
 	string str;
-	cin>>t;
-	for(int k = 0;k<t;k++){
+	cin>>n;
+	for(int k = 0;k<n;k++){
 		cin>>str;
 		c = new int[str.length()];
+		int *ptr = c;
+		*ptr = 0;
+		ptr++;
 		for(int i=0;i<str.length();i++){
 			if(str[i] == '*'){
-				*(c+++count) = i;
+				*ptr = i;
+				ptr++;
 			}
 		}
-		*(c+++count) = -1;
-		while()
+		*ptr = str.length();
+		while(*c != str.length()){
+			for(int i = *c;i<=*(c+1);i++){
+				if(str[i] == 'X'){
+					count = 0;
+					break;
+				}
+				if(str[i] == 'O'){
+					count++;
+				}
+			}
+			result = result + count;
+			count = 0;
+			c++;
+		}
+		cout<<result<<endl;
+		result = 0;
+		//output[k] = result;
+		//result = 0;
 	}
+
+	//for(int k = 0;k<n;k++){
+		//cout<<output[k]<<endl;
+	//}
 	return 0;
 }

@@ -37,18 +37,11 @@ int peek(struct Stacknode* root){
 	}
 	return root->data;
 }
+
 int main(){
 	struct Stacknode* stack = NULL;
-	push(&stack,10);
-	push(&stack, 10);
-    push(&stack, 20);
-    push(&stack, 30);
-
-    cout<<pop(&stack)<<endl;
-    cout<<pop(&stack)<<endl;
-    cout<<pop(&stack)<<endl;
-    cout<<pop(&stack)<<endl;
-    cout<<pop(&stack)<<endl;
+	char *str = "sameer";
+	reverse(str);
     return 0;
 
 }
