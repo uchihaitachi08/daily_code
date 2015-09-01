@@ -4,8 +4,9 @@ using namespace std;
  
 int main()
 {
-	const char* s= "sameer";
-	cout<<s<<endl;
-
+	int m = 1;
+	int y = 2000;
+	y -= m < 3;
+	cout<<y<<endl;
     return 0;
 }
