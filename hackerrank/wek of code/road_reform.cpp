@@ -1,9 +1,11 @@
 #include<iostream>
 #include<string>
 #include<climits>
+#include<ctime>
 using namespace std;
- int mindistance( int* dist,bool* spatset, int size){
-	 int min = INT_MAX,min_index;
+ int mindistance(  int* dist,bool* spatset, int size){
+	int min = INT_MAX;
+	int min_index;
 	for( int v = 0;v<size;v++){
 		if(spatset[v] == false && dist[v] <= min){
 			min = dist[v], min_index = v;			
@@ -12,7 +14,7 @@ using namespace std;
 	return min_index;
 }
 
- void dijkstra( int **arr, int src, int size,int *d){
+ int dijkstra( int **arr, int src, int dest, int size){
 	 int dist[size];
 	bool spatset[size];
 
@@ -30,18 +32,20 @@ using namespace std;
 				dist[v] = dist[u] + arr[u][v];
 		}
 	}
-	for(int i=0;i<size;i++){
-		*(d+i)  = dist[i];
-	}
+	return dist[dest];
 }
-void decr( int** arr, int size,int** d){
-	int sum = 0;
-	for(int i=0;i<size-1;i++){
-		int min_distance = d[i][size-1];
-		for(int j=i+1;j<=size-1;j++){
-			if(min_distance > d[j][size-1]){
-				sum = sum + min_distance - d[j][size-1] - 1;
-			}
+void decr( int** arr, int src, int size, int min_distance){
+	int sum = 0,add;
+	for(int i=1;i<=size-1;i++){
+		if(min_distance > dijkstra(arr,0,i,size)){
+			add = min_distance - dijkstra(arr,0,i,size) - 1;
+			if(add > 0)
+			sum = sum + add;
+		}
+		if(min_distance > dijkstra(arr,i,size-1,size)){
+			add = min_distance - dijkstra(arr,i,size-1,size) - 1;
+			if(add > 0)
+			sum = sum + add ;
 		}
 	}
 	cout<<sum<<endl;
@@ -55,9 +59,9 @@ int main(){
 	for( int i=0;i<n;i++)
 		arr[i] = new  int[n];
 
-	int **d = new int*[n];//array to store the minimum distance 
-	for(int i=0;i<n;i++)
-		d[i] = new int[n];
+	//int **d = new int*[n];//array to store the minimum distance 
+	//for(int i=0;i<n;i++)
+		//d[i] = new int[n];
 
 
 	for( int i= 0;i<n;i++){
@@ -68,13 +72,10 @@ int main(){
 	cin>>m;
 	while(m--){
 		cin>>a>>b>>cost;
-		if((arr[a-1][b-1] != 0) && (arr[a-1][b-1] < cost))
-			continue;
-		else{
+		if((arr[a-1][b-1]) > cost){
 			arr[a-1][b-1] = cost;
 			arr[b-1][a-1] = cost;
 		}
-		
 	}
 	//for(int i=0;i<n;i++){
 		//for(int j=0;j<n;j++){
@@ -82,16 +83,8 @@ int main(){
 		//}
 		//cout<<endl;
 	//}
-	for(int i=0;i<n;i++){
-		dijkstra(arr,i,n,d[i]);
-	}
-	//for( int i= 0;i<n;i++){
-		//for( int j=0;j<n;j++){
-			//cout<<d[i][j]<<" ";
-		//}
-		//cout<<endl;
-	//}
-	decr(arr,n,d);
+	min_distance = dijkstra(arr,0,n-1,n);
+	decr(arr,0,n,min_distance);
 	//int stop_s=clock();
 	//cout << "time: " << (stop_s-start_s)/double(CLOCKS_PER_SEC)*1000 << endl;
 	return 0;
