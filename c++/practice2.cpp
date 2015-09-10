@@ -2,10 +2,12 @@
 #include<string>
 #include<cstring>
 using namespace std;
+string change(char* str){
+	*(s+3) = 'c';
+	return s;
+}
 int main(){
-	string s;
-	cin>>s;
-	cout<<s[2]<<s[3]<<endl;
-	cout<<(s[3]-s[2])<<endl;
-	return 0;
+	char* s = (char*)malloc(sizeof(char));
+	scanf("%s",s);
+	change(s);
 }
