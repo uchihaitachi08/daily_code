@@ -16,13 +16,13 @@ void count(char** s, char** str,int n,int m){
 	for(int i=1;i<=n;i++){
 		for(int j = 2;j<=m+1;j++){
 			if(s[i][j] == '#'){
-				if(s[i-1][j+1] == '#' || s[i][j-2] == '#'){
-					continue;
-				}
-				else{
+				//if(s[i-1][j+1] == '#' || s[i][j-2] == '#'){
+					//continue;
+				//}
+				//else{
 					if(check(s,str,i,j-1))
 						flag++;
-				}
+				//}
 			}
 		}
 	}
