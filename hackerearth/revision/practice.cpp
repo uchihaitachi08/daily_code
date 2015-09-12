@@ -1,9 +1,8 @@
 #include<iostream>
 using namespace std;
 int main(){
-	string s;
-	cin>>s;
-	if(s == "sameer")
-		cout<<"yoho"<<endl;
+	int a,b;
+	a = b = 3;
+	cout<<a<<b<<endl;
 	return 0;
 }

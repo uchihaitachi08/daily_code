@@ -1,50 +1,60 @@
-#include<iostream>
-#include<string>
-#include<cstring>
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
 using namespace std;
-bool check(long int* arr,long  int** arr2,long int k){
-	for(long int i=0;i<k;i++){
-		if(arr2[i][1] == 1){
-			arr[arr2[i][0]-1] = 1;
-			arr[arr2[i][2]-1] = 1;
-		}
-	}
-	for(long int i=0;i<k;i++){
-		if(arr2[i][1] == 0){
-			if((arr[arr2[i][0]-1] != -1) && (arr[arr2[i][2]-1] != -1) && (arr[arr2[i][0]-1] == arr[arr2[i][2]-1]))
-				return false;
-		}
-	}
-	return true;
-}
 
-int main(){
-	int t;
-	long int n,k;
-	string s;
-	cin>>t;
-	while(t--){
-		cin>>n>>k;
-		long int* arr = new long int[n];
-		for(long int i=0;i<n;i++)
-			arr[i] = -1;
-		long int **arr2 = new long int*[k];
-		for(long int i=0;i<k;i++){
-			arr2[i] = new long int[3];
-		}
-		for(long int i=0;i<k;i++){
-			cin>>arr2[i][0];
-			cin>>s;
-			if(s == "=")
-				arr2[i][1] = 1;
-			else if(s == "!=")
-				arr2[i][1] = 0;
-			cin>>arr2[i][2];
-		}
-		if(check(arr,arr2,k))
-			cout<<"YES"<<endl;
-		else
-			cout<<"NO"<<endl;
-	}
-	return 0;	
+struct cd
+    {
+    int left;
+    int right;
+};
+
+struct cd ar[500000];
+int func(int n, int element)
+ {
+    if(ar[n] && element<n)
+        return ar[n].right;
+    
+    if(ar[n] && element>n)
+        return ar[n].right;
+    
+    
+}   
+
+
+int main() 
+{
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */ 
+    
+    int n,i,j;
+    cin>>n;
+    int **arr=new int*[n];
+    for(i=0;i<n;i++)
+        arr[i]=new int[2];
+    
+    int ar[n+1];
+    
+    for(i=0;i<n+1;i++)
+        ar[i]=0;
+    
+    ar[0]=0;
+    for(i=1;i<=n;i++)
+        cin>>ar[i];
+    
+    for(i=0;i<n;i++)
+    {
+       cin>>arr[i][0]>>arr[i][1];
+        
+    }
+    int edge[n]
+    for(i=0;i<n;i++)
+    {
+        
+    }
+    
+    
+    
+    return 0;
 }

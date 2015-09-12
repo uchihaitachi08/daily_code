@@ -13,8 +13,8 @@ bool check(char** s,char** str,int n,int m){
 }
 void count(char** s, char** str,int n,int m){
 	int flag = 0;
-	for(int i=1;i<=n;i++){
-		for(int j = 2;j<=m+1;j++){
+	for(int i=1;i<=n-31;i++){
+		for(int j = 2;j<=m-30;j++){
 			if(s[i][j] == '#'){
 				//if(s[i-1][j+1] == '#' || s[i][j-2] == '#'){
 					//continue;
@@ -52,11 +52,11 @@ int main(){
 			}
 		}
 	}
-	for(int i=0;i<2003;i++){
-		for(int j=0;j<2003;j++){
-			s[i][j] = '_';
-		}
-	}
+	//for(int i=0;i<2003;i++){
+		//for(int j=0;j<2003;j++){
+			//s[i][j] = '_';
+		//}
+	//}
 	int n,m;
 	cin>>n>>m;
 	for(int i=1;i<=n;i++){
