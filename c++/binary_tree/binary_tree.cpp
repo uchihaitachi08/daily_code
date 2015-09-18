@@ -41,6 +41,35 @@ struct node* new_node(int data){
 	new_node->right = NULL;
 	return new_node;
 }
+int size(struct node* root){
+	if(root == NULL)
+		return 0;
+	return (size(root->left)+1+size(root->right));
+}
+int maxdepth(struct node* root){
+	if(root == NULL)
+		return 0;
+	return 1+(maxdepth(root->left) > maxdepth(root->right) ? maxdepth(root->left) : maxdepth(root->right));
+}
+void delete_tree(struct node* root){
+	if(root == NULL) return;
+	delete_tree(root->left);
+	delete_tree(root->right);
+	cout<<"deleting node "<<root->data<<endl;
+	delete(root);
+}
+
+void mirror_tree(struct node* root){
+	if(root == NULL)
+		return;
+	struct node* temp = root->left;
+	root->left = root->right;
+	root->right = temp;
+	mirror_tree(root->left);
+	mirror_tree(root->right);
+	delete(temp);
+	return;
+}
 int main(){
 	struct node* root = new_node(1);
 
@@ -52,8 +81,8 @@ int main(){
 
 	inorder(root);
 	cout<<endl;
-	preorder(root);
-	cout<<endl;
-	postorder(root);
+	cout<<"maxdepth of tree "<<maxdepth(root)<<endl;
+	mirror_tree(root);
+	inorder(root);
 	return 0;
 }

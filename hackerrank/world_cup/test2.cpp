@@ -1,134 +1,143 @@
-#include <cmath>
-#include <cstdlib>
-#include <cstring>
-#include <cstdio>
-#include <vector>
-#include <iostream>
-#include <algorithm>
-
-#define MAX 10000
+#include<iostream>
+#include<cstring>
+#include<climits>
 using namespace std;
 
-string add(string a,string b)
+struct node{
+	 int data;
+	 int left;
+	 int right;
+	struct node* next;
+};
+void push(struct node** head_ref,  int data){
+	struct node* new_node = new struct node;
+	new_node->data = data; //there is no need of making a different case for empty list case
+	new_node->next = (*head_ref);
+	(*head_ref) = new_node;
+	return;
+}
+
+void swap( int** arr,  int a, int b)
 {
-    int i,j;
-    
-    for(i=s.size()-1;i>=0;i--)
+    for( int i=0;i<=2;i++){
+		 int c = arr[i][a];
+		arr[i][a] = arr[i][b];
+		arr[i][b] = c;
+	}
+}
+ 
+
+int partition ( int **arr,  int l,  int h, int t)
+{
+	 int z = ( t == 1) ? 2 : 1;
+     int x = arr[z][h];   
+     int i = (l - 1);  
+ 
+    for (int j = l; j <= h- 1; j++)
+    {
+        if (arr[z][j] <= x)
         {
-        a[i] + 
+            i++;    
+            swap(arr,i,j);  
+        }
     }
-    
+    swap(arr,i + 1,h);  
+    return (i + 1);
 }
-
-char * multiply(char a[],char b[])
+ 
+void quickSort( int **arr,  int l,  int h, int t)
 {
-    static char mul[MAX];
-    char c[MAX];
-    char temp[MAX];
-    int la,lb;
-    int i,j,k=0,x=0,y;
-    long int r=0;
-    long sum = 0;
-    la=strlen(a)-1;
-        lb=strlen(b)-1;
-   
-        for(i=0;i<=la;i++){
-                a[i] = a[i] - 48;
-        }
-
-        for(i=0;i<=lb;i++){
-                b[i] = b[i] - 48;
-        }
-
-    for(i=lb;i>=0;i--){
-         r=0;
-         for(j=la;j>=0;j--){
-             temp[k++] = (b[i]*a[j] + r)%10;
-             r = (b[i]*a[j]+r)/10;
-         }
-         temp[k++] = r;
-         x++;
-         for(y = 0;y<x;y++){
-             temp[k++] = 0;
-         }
+    if (l < h)
+    {
+         int p = partition(arr, l, h,t); 
+        quickSort(arr, l, p - 1,t);
+        quickSort(arr, p + 1, h,t);
     }
-   
-    k=0;
-    r=0;
-    for(i=0;i<la+lb+2;i++){
-         sum =0;
-         y=0;
-         for(j=1;j<=lb+1;j++){
-             if(i <= la+j){
-                 sum = sum + temp[y+i];
-             }
-             y += j + la + 1;
-         }
-         c[k++] = (sum+r) %10;
-         r = (sum+r)/10;
-    }
-    c[k] = r;
-    j=0;
-    for(i=k-1;i>=0;i--){
-         mul[j++]=c[i] + 48;
-    }
-    mul[j]='\0';
-    return mul;
 }
 
+void make_s(struct node* head){
+	while(head->next != NULL){
+		head->left = -1;
+		head = head->next;
+	}
+	head->left = -1;
+	return;
+}
+
+ int fill(struct node* head,  int sum,   int* diff, int i,  int* result,  int* left_main){
+
+	 int sum2 = 0;
+	while(head->left != -1){
+		sum2 = sum2 + head->left;
+		head = head->next;
+	}
+	head->left = sum2+ i;
+	head->right = sum - (head->left);
+	*left_main = head->left;
+	 int max = (head->left > head->right) ? head->left : head->right;
+	 int min = (head->left < head->right) ? head->left : head->right;
+	if((max - min) < *diff){
+		*diff = max - min;
+		*result = max;
+		//cout<<head->data<<endl;
+		// cout<<i<<" "<<*result<<endl;
+	}
+	return head->data;
+}
+void fill2(struct node* head, int i, int sum,  int* left_main){
+	while(head->data != i && head->next){
+		head = head->next;
+	}
+	head->left = *left_main;
+	head->right = sum - head->left;
+
+	return;
+}
 
 int main() {
-    char aa[100];
-    char bb[100];
-    string aaa,bbb;
-    char *cr;
-    
-    int n,q,i,j,a;
-    int l,r,c;
-    cin>>n>>q;
-    long long arr1[n]={0};
-    long long arr2[n]={0};
-    
-    for(i=0;i<q;i++)
-        {
-         cin>>a>>l>>r;
-        
-        
-        if(a==1)
-            {
-            cin>>c;
-            for(j=l-1;j<r;j++)
-                arr1[j]=arr1[j]+c;
-            
-        }
-        if(a==2)
-            {
-            cin>>c;
-            for(j=l-1;j<r;j++)
-                arr2[j]=arr2[j]+c;
-            
-        }
-        if(a==3)
-            {
-            for(j=l-1;j<r;j++)
-                {
-                
-                aaa=to_string(arr1[j]);
-                bbb=to_string(arr2[j]);
-                
-                strcpy(aa,aaa.c_str());
-                strcpy(bb,bbb.c_str());
-                cr=multiply(aa,bb);
-                cout<<cr<<endl;
-            }
-            
-        }
-        
-        
-        
-    }
-    
-    
-   
+	int start_s=clock();
+     int n,x,y,nd;
+	  int sum = 0;
+	  int diff = INT_MAX;
+	  int result = 0;
+	  int left = 0;
+	cin>>n;
+	 int** arr = new  int*[3];
+	for( int i=0;i<3;i++){
+		arr[i] = new  int[n+1];
+	}
+	for( int i=1;i<=n;i++){
+		arr[0][i] = i;
+		cin>>arr[1][i];
+		sum = sum + arr[1][i];
+	}
+	// cout<<sum<<endl;
+	struct node** a = new struct node*[n+1];
+	for( int i=0;i<n-1;i++){
+		cin>>x>>y;
+		arr[2][x]++;
+		arr[2][y]++;
+		push(&a[x],y);
+		push(&a[y],x);
+	}
+	
+	quickSort(arr,1,n,1);
+	for( int i=1;i<=n;i++){
+		make_s(a[i]);
+	}
+
+	// for(int i=0;i<=2;i++){
+	// 	for(int j = 1;j<=n;j++){
+	// 		cout<<arr[i][j]<<" ";
+	// 	}
+	// 	cout<<endl;
+	// }
+	for( int i=1;i<n;i++){
+		nd = fill(a[arr[0][i]],sum,&diff,arr[1][i],&result,&left);
+		fill2(a[nd],arr[0][i],sum,&left);
+
+	}
+	cout<<result<<endl;
+	
     return 0;
 }
