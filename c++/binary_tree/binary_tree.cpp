@@ -58,6 +58,10 @@ void delete_tree(struct node* root){
 	cout<<"deleting node "<<root->data<<endl;
 	delete(root);
 }
+void delete_tree_root(struct node** root){
+	delete_tree(*root);
+	*root = NULL;
+}
 
 void mirror_tree(struct node* root){
 	if(root == NULL)
@@ -70,6 +74,37 @@ void mirror_tree(struct node* root){
 	delete(temp);
 	return;
 }
+void printleftview(struct node* root){
+	if(root == NULL)
+		return;
+		cout<<root->data<<" ";
+		printleftview(root->left);
+		return;
+}
+void root_to_path(struct node* node, struct node* root){
+	if(node->left == NULL || node == NULL){
+		printleftview(root);
+		cout<<endl;
+		return;
+	}
+	root_to_path(node->left,root);
+	struct node* temp = node->left;
+	node->left = node->right;
+	node->right = temp;
+	root_to_path(node->left,root);
+	node->right = node->left;
+	node->left = temp;
+	return;
+}
+
+//function to count leaf nodes of the tree
+int count_leaf_node(struct node* root){
+	if(root == NULL)
+		return 0;
+	if(root->left == NULL && root->right == NULL)
+		return 1;
+	return count_leaf_node(root->left)+count_leaf_node(root->right);
+}
 int main(){
 	struct node* root = new_node(1);
 
@@ -80,9 +115,6 @@ int main(){
 	root->left->right = new_node(5);
 
 	inorder(root);
-	cout<<endl;
-	cout<<"maxdepth of tree "<<maxdepth(root)<<endl;
-	mirror_tree(root);
-	inorder(root);
+	cout<<"number of leaf nodes "<<count_leaf_node(root)<<endl;
 	return 0;
 }
