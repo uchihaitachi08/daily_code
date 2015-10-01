@@ -171,7 +171,8 @@ bool check_children_sum(struct node* root){
 int diameter_tree(struct node* root){
 	if(root == NULL)
 		return 1;
-	return diameter_tree(root->left)+diameter_tree(root->right);
+	int num = diameter_tree(root->left)+diameter_tree(root->right) - 1;
+	
 }
 int main(){
 	struct node* root = new_node(1);
