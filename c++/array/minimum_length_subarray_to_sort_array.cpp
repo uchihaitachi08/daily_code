@@ -3,6 +3,26 @@
 #include<algorithm>
 #include<climits>
 using namespace std;
+//int this question there is an answer in the solution which I have upvoted is much more good than previous one
+//that method is I am posting in the answer below
+void func(int*arr, int n){
+	int max_so_far = INT_MIN,min_so_far = INT_MAX,index1,index2;
+	for(int i=0;i<n;i++){
+		if(arr[i] > max_so_far)
+			max_so_far = arr[i];
+		if(arr[i] < max_so_far)
+			index2 = i;
+	}
+	for(int i=n-1;i>=0;i--){
+		if(arr[i] < min_so_far)
+			min_so_far = arr[i];
+		if(arr[i] > min_so_far)
+			index1 = i;
+	}
+	cout<<index1<<" "<<index2<<endl;
+	return;
+}
+
 int main(){
 	int n;
 	cin>>n;
@@ -44,6 +64,7 @@ int main(){
 			break;
 		}
 	}
+	func(arr,n);
 	cout<<index1<<" "<<index2<<endl;
 	return 0;
 
