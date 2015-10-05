@@ -36,7 +36,7 @@ void swapsort(int *arr, int n){
 	int start = 0;
 	int end = n-1;
 	for(int i=0;i<=end;){
-		printarray(arr,n);
+		// printarray(arr,n);
 		if(arr[i] == 0){
 			swap(&arr[i],&arr[start++]);
 			i++;
