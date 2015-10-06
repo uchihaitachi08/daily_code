@@ -1,10 +1,9 @@
 #include<iostream>
+#include<cstdlib>
 using namespace std;
 int main(){
-
-	char c = 't';
-	char d = 'r';
-	char *const p = &c;
-	p = &d;	
+	for(int i=0;i<10000;i++){
+		cout<<rand()%10000<<" ";
+	}
 	return 0;
 }
