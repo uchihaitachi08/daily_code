@@ -1,9 +1,10 @@
 #include<iostream>
 #include<cstdlib>
+#include<string>
+#include<cstring>
 using namespace std;
 int main(){
-	for(int i=0;i<10000;i++){
-		cout<<rand()%10000<<" ";
-	}
+	int i = 10;
+	cout<<std::to_string(i)<<endl;
 	return 0;
 }
