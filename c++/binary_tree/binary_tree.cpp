@@ -1,190 +1,204 @@
 #include<iostream>
+#include<vector>
 #include<queue>
+#include<stack>
 using namespace std;
 struct node{
 	int data;
 	struct node* left;
 	struct node* right;
 };
-//function to print the inorder traversal 
-void inorder(struct node* root){
-	if(root == NULL)
-		return;
-	inorder(root->left);
-	cout<<root->data<<" ";
-	inorder(root->right);
-	return;
-}
 
-//recursive function to preorder traversal
-void preorder(struct node* root){
-	if(root == NULL)
-		return;
-	cout<<root->data<<" ";
-	preorder(root->left);
-	preorder(root->right);
-	return;
-}
-
-//recursive funtion to write postorder traversal
-void postorder(struct node* root){
-	if(root == NULL)
-		return;
-	postorder(root->left);
-	postorder(root->right);
-	cout<<root->data<<" ";
-	return;
-}
+//creating new_node and returning that to the struct node pointer
 struct node* new_node(int data){
-	struct node* new_node = new struct node;
-	new_node->data = data;
-	new_node->left = NULL;
-	new_node->right = NULL;
-	return new_node;
-}
-int size(struct node* root){
-	if(root == NULL)
-		return 0;
-	return (size(root->left)+1+size(root->right));
-}
-int maxdepth(struct node* root){
-	if(root == NULL)
-		return 0;
-	return 1+(maxdepth(root->left) > maxdepth(root->right) ? maxdepth(root->left) : maxdepth(root->right));
-}
-void delete_tree(struct node* root){
-	if(root == NULL) return;
-	delete_tree(root->left);
-	delete_tree(root->right);
-	cout<<"deleting node "<<root->data<<endl;
-	delete(root);
-}
-void delete_tree_root(struct node** root){
-	delete_tree(*root);
-	*root = NULL;
+	struct node* temp = new struct node;
+	temp->data = data;
+	return temp;
 }
 
-void mirror_tree(struct node* root){
-	if(root == NULL)
+//preoreder, visit the root, then left and then right
+void preorder(struct node* head){
+	if(head == NULL)
 		return;
-	struct node* temp = root->left;
-	root->left = root->right;
-	root->right = temp;
-	mirror_tree(root->left);
-	mirror_tree(root->right);
-	delete(temp);
+	cout<<head->data<<" ";
+	preorder(head->left);
+	preorder(head->right);
 	return;
 }
-void printleftview(struct node* root){
-	if(root == NULL)
+
+//visit the left , right and then root
+void postorder(struct node* head){
+	if(head == NULL)
 		return;
-		cout<<root->data<<" ";
-		printleftview(root->left);
-		return;
+	postorder(head->left);
+	postorder(head->right);
+	cout<<head->data<<" ";
+	return;
 }
+
+//size of binary tree, size of left tree + size of right tree and +1
+int size_tree(struct node* head){
+	if(head == NULL)
+		return 0;
+	return size_tree(head->left) + 1+ size_tree(head->right);
+}
+
+//visit the left, root and then right
+void inorder(struct node* head){
+	if(head== NULL)
+		return;
+	inorder(head->left);
+	cout<<head->data<<" ";
+	inorder(head->right);
+	return;
+}
+
+int max_depth(struct node* head){
+	if(head == NULL)
+		return 0;
+	int a1 = max_depth(head->left);
+	int a2 = max_depth(head->right);
+	a1 = (a1 > a2 ) ? a1 : a2;
+	return a1 + 1;
+}
+
+void delete_tree(struct node** head_ref){
+	if(*head_ref == NULL)
+		return;
+	delete_tree(&((*head_ref)->left));
+	delete_tree(&((*head_ref)->right));
+	delete(*head_ref);
+}
+
+//function to mirror a tree
+void mirror_tree(struct node* head){
+	if(head == NULL)
+		return;
+	struct node* temp = new struct node;
+	temp = head->left;
+	head->left = head->right;
+	head->right = temp;
+	mirror_tree(head->left);
+	mirror_tree(head->right);
+	return;
+}
+
+//function to print all the root to leaf paths
+//utility function print the leftest path
+void print_leftest(struct node* head){
+	if(head == NULL)
+		return;
+	cout<<head->data<<" ";
+	print_leftest(head->left);
+	return;
+}
+
 void root_to_path(struct node* node, struct node* root){
 	if(node->left == NULL || node == NULL){
-		printleftview(root);
-		cout<<endl;
+		print_leftest(root);
+		cout<<endl; 
 		return;
 	}
 	root_to_path(node->left,root);
-	struct node* temp = node->left;
+	struct node* temp = node->left;  //swapping the subtrees
 	node->left = node->right;
 	node->right = temp;
-	root_to_path(node->left,root);
-	node->right = node->left;
+	root_to_path(node->left,root); // travesring the left subtree which was right tree.
+	node->right = node->left;// swapping the subtrees which was previously swapped.
 	node->left = temp;
 	return;
 }
 
-//function to count leaf nodes of the tree
-int count_leaf_node(struct node* root){
-	if(root == NULL)
+//level order traversal using queue
+void print_level_order(struct node* head){
+	queue<struct node*>q;
+	struct node* temp = head;
+	while(temp){
+		cout<<temp->data<<" ";
+		if(temp->left)
+			q.push(temp->left);
+		if(temp->right)
+			q.push(temp->right);
+		temp = q.front();
+		q.pop();
+	}
+	return;
+}
+
+//count leaf nodes of a tree, if node == NULL return 0, else if node->left == NULL && node->right == NULL return 1 
+// leaf nodes of a tree = leaf nodes of left tree + leaf nodes of right tree
+
+int count_leaf(struct node* head){
+	if(head == NULL)
 		return 0;
-	if(root->left == NULL && root->right == NULL)
+	if(head->left == NULL && head->right == NULL)
 		return 1;
-	return count_leaf_node(root->left)+count_leaf_node(root->right);
+	int leaf = count_leaf(head->left)+ count_leaf(head->right);
+	return leaf;
 }
 
+//function to print the level order traversal in spiral form
+//the trick is to use two stacks 
 
-//function for breadth first traversal of tree without queue
-//(O)n^2 time complexity
-//funda: first calculate the height of the tree
-//the for each height call print level order and print the data if the level is one
-void printgivenlevel(struct node* root, int i){
-	if(root == NULL)
-		return;
-	if(i == 1){
-		cout<<root->data<<" ";
-		return;
+void print_level_order_spiral(struct node* head){
+	stack<struct node*>s1;
+	stack<struct node*>s2;
+	s1.push(head);
+	while(!s1.empty() || !s2.empty()){
+		while(!s1.empty()){
+			struct node* temp = s1.top();
+			s1.pop();
+			cout<<temp->data<<" ";
+
+			if(temp->left)
+				s2.push(temp->left);
+			if(temp->right)
+				s2.push(temp->right);
+		}
+		while(!s2.empty()){
+			struct node* temp = s2.top();
+			s2.pop();
+			cout<<temp->data<<" ";
+
+			if(temp->left)
+				s1.push(temp->left);
+			if(temp->right)
+				s1.push(temp->right);
+		}
 	}
-	printgivenlevel(root->left,i-1);
-	printgivenlevel(root->right,i-1);
-}
-
-void printlevelorder(struct node* root){
-	int height = maxdepth(root);
-	for(int i=1;i<=height;i++){
-		printgivenlevel(root,i);
-	}
-}
-
-//function to print the breadth first travesal of the tree
-//funda: print the root, and store its children to queue
-//dequeue and make it the root
-
-void printlevelorderq(struct node* root){
-	struct node* temp_node = root;
-	queue<struct node*> myquque;
-	while(temp_node){
-		cout<<temp_node->data<<" ";
-		if(temp_node->left)
-			myquque.push(temp_node->left);
-		if(temp_node->right)
-			myquque.push(temp_node->right);
-		temp_node = myquque.front();
-		myquque.pop();
-	}
-	cout<<endl;
-}
-
-//function to check children sum property of a binary tree
-//property is For every node, data value must be equal to sum of data values in left and right children. Consider data value as 0 for NULL children. Below tree is an example
-
-bool check_children_sum(struct node* root){
-	int l = 0,r = 0;
-	if(root == NULL || root->left == NULL || root->right == NULL)
-		return 1;
-	else{
-		if(root->left)
-			l = root->left->data;
-		if(root->right)
-			r = root->right->data;
-		return ((root->data == l+r) && (check_children_sum(root->left)) && check_children_sum(root->right));
-	}
-}
-
-//function to print the diameter of a binary tree
-//go to every node, null node will return 1, other nodes will return function +1 
-
-int diameter_tree(struct node* root){
-	if(root == NULL)
-		return 1;
-	int num = diameter_tree(root->left)+diameter_tree(root->right) - 1;
-	
 }
 int main(){
-	struct node* root = new_node(1);
+	struct node* head = new_node(1);
+	head->left = new_node(2);
+	head->right = new_node(3);
 
-	root->left = new_node(2);
-	root->right = new_node(3);
-	root->right->left = new_node(7);
+	head->left->left = new_node(4);
+	head->left->right = new_node(5);
 
-	root->left->left = new_node(4);
-	root->left->right = new_node(5);
+	head->right->left = new_node(6);
+	head->right->right = new_node(7);
 
-	inorder(root);
-	cout<<"diameter of tree "<<diameter_tree(root)<<endl;
+	// preorder(head);
+	// cout<<endl;
+
+	// postorder(head);
+	// cout<<endl;
+
+	// inorder(head);
+	// cout<<endl;
+
+	// cout<<size_tree(head)<<endl;
+	// cout<<max_depth(head)<<endl;
+
+	// // delete_tree(&head);
+	// mirror_tree(head);
+	// preorder(head);
+	// cout<<endl;
+	// root_to_path(head,head);
+
+	print_level_order(head);
+	cout<<endl;
+	print_level_order_spiral(head);
+	cout<<endl;
 	return 0;
 }
