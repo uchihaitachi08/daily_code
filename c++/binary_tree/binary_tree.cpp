@@ -36,6 +36,25 @@ void postorder(struct node* head){
 	return;
 }
 
+
+//inorder traversal using stack
+void inorder_by_stack(struct node* head){
+	stack<struct node*>my_stack;
+	struct node* temp = head;
+	while(temp){
+		cout<<temp->data<<" ";
+		if(temp->right)
+			my_stack.push(temp->right);
+		if(temp->left)
+			my_stack.push(temp->left);
+		if(my_stack.empty())
+			break;
+		temp = my_stack.top();
+		my_stack.pop();
+	}
+	return;
+
+}
 //size of binary tree, size of left tree + size of right tree and +1
 int size_tree(struct node* head){
 	if(head == NULL)
@@ -178,27 +197,7 @@ int main(){
 	head->right->left = new_node(6);
 	head->right->right = new_node(7);
 
-	// preorder(head);
-	// cout<<endl;
-
-	// postorder(head);
-	// cout<<endl;
-
-	// inorder(head);
-	// cout<<endl;
-
-	// cout<<size_tree(head)<<endl;
-	// cout<<max_depth(head)<<endl;
-
-	// // delete_tree(&head);
-	// mirror_tree(head);
-	// preorder(head);
-	// cout<<endl;
-	// root_to_path(head,head);
-
-	print_level_order(head);
-	cout<<endl;
-	print_level_order_spiral(head);
+	inorder_by_stack(head);
 	cout<<endl;
 	return 0;
 }
